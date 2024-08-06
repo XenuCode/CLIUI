@@ -1,12 +1,17 @@
 namespace CLIUI;
 
-public class Layout
+public class Layout : IRenderable
 {
-    private LayoutPosition _position;
-    
+    public LayoutPosition Position { get; set; }
+
+    private int PreferredSize { get; set; } = 0;
     public Layout(LayoutPosition position)
     {
-        _position = position;
+        Position = position;
     }
-    
+
+    public char[] Render(int width, int height)
+    {
+        throw new NotImplementedException();
+    }
 }
