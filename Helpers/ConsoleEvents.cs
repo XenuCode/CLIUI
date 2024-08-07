@@ -13,7 +13,7 @@ public class ConsoleEvents
         // Event will be null if there are no subscribers
         if (raiseEvent != null)
         { 
-            raiseEvent(this, e);
+            raiseEvent(this,e);
         }
     }
 
@@ -27,11 +27,11 @@ public class ConsoleEvents
             {
                 if (Console.WindowWidth != width || Console.WindowHeight != height)
                 {
-                    width = Console.WindowWidth; 
+                    width = Console.WindowWidth;
                     height = Console.WindowHeight;
-                    ConsoleSizeChange(new WindowSize(width,height) );
+                    OnConsoleSizeChange?.Invoke(this, new WindowSize(width, height)); // Corrected line
                 }
-                Thread.Sleep(50);
+                Thread.Sleep(10);
             }
         }).Start();
     }

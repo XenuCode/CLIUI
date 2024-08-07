@@ -3,19 +3,19 @@ namespace CLIUI;
 public class Canvas : IRenderable
 {
     private String _canvasName;
-    private List<Layout> _layouts;
-
+    public List<IWidget> Widgets { get; set; } = new();
+    
     public char[] Render(int width, int height)
     {
-        var tops= _layouts.Where(x =>
+        var tops= Widgets.Where(x =>
             x.Position == LayoutPosition.LeftTop ||
             x.Position == LayoutPosition.MiddleTop ||
             x.Position == LayoutPosition.RightTop);
-        var centers =_layouts.Where(x => 
+        var centers =Widgets.Where(x => 
             x.Position == LayoutPosition.LeftCenter ||
             x.Position == LayoutPosition.MiddleCenter ||
             x.Position == LayoutPosition.RightCenter);
-        var bottoms = _layouts.Where(x =>
+        var bottoms = Widgets.Where(x =>
             x.Position == LayoutPosition.LeftBottom ||
             x.Position == LayoutPosition.MiddleBottom ||
             x.Position == LayoutPosition.RightBottom);
@@ -26,20 +26,36 @@ public class Canvas : IRenderable
             levelCount++;
         if (bottoms.Any())
             levelCount++;
-        var perLevelHeight = (height - levelCount - 1) / levelCount;
+        var perLevelHeight =(int) Math.Round((double)((height) / levelCount),MidpointRounding.AwayFromZero);
 
-        var topLevelChars = RenderLevel(perLevelHeight,width, tops);
-        throw new NotImplementedException();
+        var topLevelChars = RenderLevel((int) Math.Round((double)((height) / levelCount),MidpointRounding.AwayFromZero),width, tops);
+        return topLevelChars;
     }
 
-    public char[] RenderLevel(int perLevelHeight, int width, IEnumerable<Layout> layouts)
+    private char[] RenderLevel(int perLevelHeight, int width, IEnumerable<IWidget> widgets)
     {
-        var perLevelWidth = (width - layouts.Count() - 1) / layouts.Count();
+        var perWidgetWidth = (width) / widgets.Count();
         char[] levelChars = new char[perLevelHeight * width];
-        foreach (var layout in layouts)
+        Console.WriteLine(levelChars.Length);
+        for (int x = 0; x < width*perLevelHeight; x++)
         {
-            var chars = layout.Render(perLevelWidth, perLevelHeight);
+            levelChars[x] = '\u2591';
         }
-
-        throw new NotImplementedException();    }
+        int z = 0;
+        Console.WriteLine(Console.WindowWidth);
+        foreach (var layout in widgets)
+        {
+            var chars = layout.Render(perWidgetWidth, perLevelHeight);
+            for (int y = 0; y < perLevelHeight; y++)
+            {
+                for (int x = 0; x < perWidgetWidth; x++)
+                {
+                    levelChars[y * perWidgetWidth + x +z*perWidgetWidth*(y+1)] = chars[y * perWidgetWidth + x];
+                }
+            }
+            z++;
+        }
+        return levelChars;
+    }
 }
+

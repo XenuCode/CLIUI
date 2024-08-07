@@ -1,8 +1,10 @@
 namespace CLIUI;
 
-public class Layout : IRenderable
+/*public class Layout : IRenderable
 {
     public LayoutPosition Position { get; set; }
+    
+    public IWidget Widget { get; set; }
 
     private int PreferredSize { get; set; } = 0;
     public Layout(LayoutPosition position)
@@ -14,4 +16,4 @@ public class Layout : IRenderable
     {
         throw new NotImplementedException();
     }
-}
+}*/
